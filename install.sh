@@ -4,6 +4,8 @@
 cwd=${PWD##*/}
 cwd=${cwd:-/}
 
+home_dir=~
+
 # Create an array with all the dotfiles in this directory
 dotfiles=( $(ls -a) )
 
@@ -13,8 +15,8 @@ for file in ${dotfiles[@]:2}; do
     if [ "$file" != ".git" ] && [ "$file" != "install.sh" ]
     then 
         # If file already exists in home, delete it.
-        if [ -e "~/$file" ]; then
-            rm -r "~/$file"
+        if [ -e "$home_dir/$file" ]; then
+            rm -r "$home_dir/$file"
             echo "File $file already existed. Deleting file"
         fi
 
