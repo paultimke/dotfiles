@@ -19,7 +19,7 @@ for file in ${dotfiles[@]:2}; do
         fi
 
         # Create the symlink to the dotfile in the home dir
-        ln -s "$cwd/$file" "~/$file"
+        ln -s "$cwd/$file" ~ 
         echo "Creating symlink for $file"
     fi
 done
