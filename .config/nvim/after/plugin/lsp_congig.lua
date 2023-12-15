@@ -6,16 +6,33 @@ lsp_config.on_attach(function(client, bufnr)
   lsp_config.default_keymaps({buffer = bufnr})
 end)
 
+-- Configure mason
 require('mason').setup({})
 require('mason-lspconfig').setup({
 	ensure_installed = {
 		'lua_ls',
 		'clangd',
+        'pylsp',
 		'rust_analyzer',
 	},
 	handlers = {
 		lsp_config.default_setup,
 	},
+})
+
+-- Setup python LSP to ignore certain warnings
+require('lspconfig').pylsp.setup({
+    settings = {
+        pylsp = {
+            plugins = {
+                pycodestyle = {enabled = false},
+                pylint = {
+                    --enabled = false
+                    args = {'--ignore=E501,E231,E221,E226,W391', '-'}
+                },
+            },
+        },
+    },
 })
 
 local cmp = require('cmp')
