@@ -15,12 +15,29 @@ return require('packer').startup(function(use)
   }
 
   -- Rose Pine colorscheme
+  --use({
+    --  'rose-pine/neovim',
+	--  as = 'rose-pine',
+	--  config = function()
+	--	  vim.cmd('colorscheme rose-pine')
+	--  end
+  --})
+
+  -- VS Code colorscheme
   use({
-	  'rose-pine/neovim',
-	  as = 'rose-pine',
-	  config = function()
-		  vim.cmd('colorscheme rose-pine')
-	  end
+      'Mofiqul/vscode.nvim',
+      as = 'vscode',
+      config = function()
+          vim.cmd('colorscheme vscode')
+      end,
+
+      require('vscode').setup({
+          transparent = true
+      })
+  })
+
+  use({
+      'lewis6991/gitsigns.nvim'
   })
 
   -- Treesitter for syntax highlighting
