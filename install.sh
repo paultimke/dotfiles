@@ -86,6 +86,8 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # Configuring neovim
+echo "Go into .config/nvim/lua/packer.lua and source the file (run :so while on nvim)"
+echo "Then run :PackerSync"
 
 ###########################################################
 # Create symlinks
@@ -96,7 +98,6 @@ dotfiles=( $(ls -a) )
 
 # Skip the '.' and '..' directory names
 for file in ${dotfiles[@]:2}; do
-    echo $file
     # Skip the .git folder in dotfiles directory
     if [ "$file" != ".git" -a "$file" != "$SCRIPT_NAME" -a "$file" != ".gitignore" -a "$file" != "aliases.txt" ]
     then 
