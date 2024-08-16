@@ -41,6 +41,13 @@ then
     # Install neovim for windows
     printf "${COLOR_GREEN}Installing neovim...${COLOR_OFF}\n"
     choco install neovim -y
+
+    # Install packer for neovim
+    ls $HOME_DIR/AppData/Local/nvim-data/site/pack/packer/start  > /dev/null
+    if [[ $? -ne 0 ]]; then
+        git clone https://github.com/wbthomason/packer.nvim "$env:LOCALAPPDATA\nvim-data\site\pack\packer\start\packer.nvim"
+    fi
+
 else
     echo "POSIX OS detected"
     brew --version > /dev/null
@@ -48,11 +55,23 @@ else
 	# Installation command taken from https://brew.sh/
         printf "${COLOR_GREEN}Installing homebrew package manager${COLOR_OFF}\n"
 	bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	(echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /root/.bashrc
+	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     fi
 
     # Install neovim for linux or mac
-    printf "${COLOR_GREEN}Installing neovim...${COLOR_OFF}\n"
-    brew install neovim
+    nvim --version > /dev/null
+    if [[ $? -ne 0 ]]; then
+	printf "${COLOR_GREEN}Installing neovim...${COLOR_OFF}\n"
+	brew install neovim
+    fi
+
+    # Install packer for neovim
+    ls ~/.local/share/nvim/site/pack/packer/start > /dev/null
+    if [[ $? -ne 0 ]]; then
+	git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+	 ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+    fi
 fi
 
 ###########################################################
@@ -60,8 +79,11 @@ fi
 ###########################################################
 
 # Install oh-my-bash
-printf "${COLOR_GREEN}Installing oh-my-bash...${COLOR_OFF}\n"
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+ls ${HOME_DIR}/.oh-my-bash > /dev/null
+if [[ $? -ne 0 ]]; then
+    printf "${COLOR_GREEN}Installing oh-my-bash...${COLOR_OFF}\n"
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+fi
 
 # Configuring neovim
 
@@ -76,16 +98,17 @@ dotfiles=( $(ls -a) )
 for file in ${dotfiles[@]:2}; do
     echo $file
     # Skip the .git folder in dotfiles directory
-    if [ "$file" != ".git" -a "$file" != "$SCRIPT_NAME" -a "$file" != ".gitignore" ]
+    if [ "$file" != ".git" -a "$file" != "$SCRIPT_NAME" -a "$file" != ".gitignore" -a "$file" != "aliases.txt" ]
     then 
         # If file already exists in home, delete it.
-        if [ -e "$home_dir/$file" ]; then
+        if [ -e "$HOME_DIR/$file" ]; then
             #rm -r "$home_dir/$file"
-            echo "File $file already existed. Deleting file"
+            echo "File $file already existed"
+            continue
         fi
 
         # Create the symlink to the dotfile in the home dir
-        #ln -s "$cwd/$file" ~ 
         echo "Creating symlink for $file"
+        ln -s "$DOTFILES_ROOT_DIR/$file" ~ 
     fi
 done
