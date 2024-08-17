@@ -24,17 +24,17 @@ return require('packer').startup(function(use)
   --})
 
   -- VS Code colorscheme
-  use({
-      'Mofiqul/vscode.nvim',
-      as = 'vscode',
-      config = function()
-          vim.cmd('colorscheme vscode')
-      end,
+  --use({
+      --'Mofiqul/vscode.nvim',
+      --as = 'vscode',
+      --config = function()
+      --    vim.cmd('colorscheme vscode')
+      --end,
 
-      require('vscode').setup({
-          transparent = true
-      })
-  })
+      --require('vscode').setup({
+      --    transparent = true
+      --})
+  --})
 
   use({
       'lewis6991/gitsigns.nvim'

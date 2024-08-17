@@ -1,0 +1,6 @@
+# Command Aliases
+alias ls="ls -G"
+alias mv="mv -i"
+
+# Aliases for commonly mistyped things
+alias -g Dekstop=~/Desktop
